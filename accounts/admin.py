@@ -1,12 +1,10 @@
-# from django.contrib import admin
-from accounts.models import CustomUser
+from accounts.models import CustomUser, Employer,Jobseeker
 from django.contrib import admin
 from django import forms
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group 
-# Register your models here.
 from django.contrib.auth.models import User
 
 
@@ -60,10 +58,10 @@ class UserAdmin(BaseUserAdmin):
     # These override the definitions on the base UserAdmin
     # that reference specific fields on auth.User.
     list_display = ('email', 'is_staff', 'is_verified')
-    list_filter = ('is_staff',)
+    list_filter = ('is_staff', 'is_employer', 'is_jobseeker')
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
-        ('Permissions', {'fields': ('is_verified', 'is_staff', 'is_active', 'is_superuser')}),
+        ('Permissions', {'fields': ('is_verified', 'is_staff', 'is_active', 'is_superuser','is_employer', 'is_jobseeker')}),
         ('Login', {'fields': ('last_login', )}),
     )
     # add_fieldsets is not a standard ModelAdmin attribute. UserAdmin
@@ -81,3 +79,5 @@ class UserAdmin(BaseUserAdmin):
 
 
 admin.site.register(CustomUser)
+admin.site.register(Employer)
+admin.site.register(Jobseeker)

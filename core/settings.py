@@ -139,3 +139,6 @@ EMAIL_USE_TLS = True
 
 EMAIL_HOST_USER = "your email"
 EMAIL_HOST_PASSWORD = "your password"
+
+# LOGIN_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = 'index'
