@@ -73,6 +73,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
 
 class Employer(models.Model):
+    emp_id = models.BigAutoField(primary_key=True)
+
     email = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     org_name = models.CharField(max_length=255)
 
@@ -86,6 +88,7 @@ class Employer(models.Model):
         return self.email
 
 class Jobseeker(models.Model):
+    jobseeker_id = models.BigAutoField(primary_key=True)
     email = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
 
     USERNAME_FIELD = 'email'

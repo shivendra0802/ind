@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'accounts',
     'crispy_forms',
     'multiselectfield',
+    'dashboard',
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap5'
