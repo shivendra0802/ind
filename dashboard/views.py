@@ -4,7 +4,11 @@ from dashboard.forms import JobDetailsForm, JobPostForm, QualificationForm
 from django.shortcuts import redirect, render
 from .forms import *
 from .models import *
-
+from django.views.generic import ListView, DetailView
+from django.http import HttpResponse
+from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank, SearchHeadline
+from django.contrib.postgres.search import TrigramSimilarity, TrigramDistance
+# from .
 
 def jobpost(request):
     if request.method == "POST":
@@ -35,6 +39,8 @@ def jobpost(request):
     else:
         fm = JobPostForm()
     return render(request, 'dashboard/dashboard.html', {"fm": fm})
+
+
 
 
 
@@ -96,3 +102,57 @@ def qualifi(request):
 
     # form = QualificationForm()
     # return render(request, 'dashboard/qualification.html', {"form": form})
+
+
+class ShowView(ListView):
+    model = JobPost 
+    template_name = 'dashboard/jobshowpage.html'
+
+
+def showdata(request):
+    job_post = JobPost.objects.all()
+    job_detail = JobDetails.objects.all()
+    qua   = Qualification.objects.all()
+    c_info = CompanyInformation.objects.all()
+    
+    context = {
+        "job_post": job_post,
+        "job_detail": job_detail,
+        "qua": qua,
+        "c_info": c_info,
+    }
+    return render(request, 'dashboard/jobshowpage.html', context)
+
+def showdatas(request,slug,id=None):
+    job_post = JobPost.objects.filter(id=id)
+    job_post = JobPost.objects.filter(slug__iexact = slug)
+    if job_post.exists():
+       job_post = job_post.first()
+    else:
+        return HttpResponse('<h1>Post Not Found</h1>')
+    job_detail = JobDetails.objects.filter(id=id).first()
+    qua   = Qualification.objects.filter(id=id).first()
+    c_info = CompanyInformation.objects.filter(id=id).first()
+    
+    context = {
+        "job_post": job_post,
+        "job_detail": job_detail,
+        "qua": qua,
+        "c_info": c_info,
+    }
+    return render(request, 'dashboard/showpagedetail.html', context)    
+
+
+
+
+
+def post_search(request):
+    form = JobPostForm()
+    results = []
+    if 'q' in request.GET:
+        form = JobPostForm(request.GET)
+        if form.is_valid():
+            q = form.cleaned_data['q']
+            # full text search
+        results = JobPost.objects.filter(title__search=q)
+    return render(request, 'dashboard/jobshowpage.html', {'form':form, 'results':results, 'q': q})  

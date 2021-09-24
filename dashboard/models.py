@@ -1,4 +1,9 @@
 from django.db import models
+from .make_slug import unique_slug_generator,random_string_generator
+import string, random
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
+from django.utils.text import slugify
 
 # Create your models here.
 
@@ -40,16 +45,32 @@ class JobPost(models.Model):
     post_language =                   models.CharField(max_length=255)
     no_of_hiring =                    models.PositiveIntegerField()
     always_hiring =                   models.BooleanField()
+    slug = models.SlugField(max_length = 250, null = True, blank = True)
+    created_at = models.DateTimeField(auto_now_add = True)
+    updated_at = models.DateTimeField(auto_now = True)
+
+    class Meta:
+        ordering = ('-created_at',)
 
 
     def __str__(self):
-        return self.job_title
+        return self.company_name
 
+
+# @receiver(pre_save, sender=JobPost)
+def pre_save_receiver(sender, instance, *args, **kwargs):
+    if not instance.slug:
+        instance.slug = unique_slug_generator(instance)
+
+pre_save.connect(pre_save_receiver, sender=JobPost)
 
 class CompanyInformation(models.Model):
     id = models.BigAutoField(primary_key=True)
+    comp_id = models.ForeignKey(JobPost, on_delete=models.CASCADE, null=True,default=1)
     your_name = models.CharField(max_length=255)
     company_name = models.CharField(max_length=255)
+    # company_name = models.ForeignKey(JobPost, on_delete=models.CASCADE)
+
     phone_no = models.PositiveIntegerField()
     company_size = models.IntegerField()
     where_here_about_us = models.CharField(max_length=255)
@@ -87,6 +108,7 @@ ben = (
 
 class JobDetails(models.Model):
     id = models.BigAutoField(primary_key=True)
+    jobd_id = models.ForeignKey(JobPost, on_delete=models.CASCADE)
     employment_type = models.CharField(max_length=255, choices=emp_type)
     contract_type = models.CharField(max_length=255, choices=contr_tye)
     job_schedule = models.CharField(max_length=255, choices=schedule)
@@ -112,6 +134,7 @@ quali = (
 
 class Qualification(models.Model):
     id = models.BigAutoField(primary_key=True)
+    qual_id = models.ForeignKey(JobDetails,on_delete=models.CASCADE,null=True,default=1)
     education = models.CharField(max_length=255, choices=quali)
     experience = models.CharField(max_length=255)
     

@@ -1,0 +1,34 @@
+
+<h1>Show Job Post</h1>
+
+<div class="container">
+      <div class="container">
+        <div class="row height d-flex justify-content-center align-items-center">
+            <div class="col-md-6">
+                <div class="form"> <i class="fa fa-search"></i> <input type="text" class="form-control form-input" placeholder="Search anything..."> <span class="left-pan"><i class="fa fa-microphone"></i></span> </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card" style="width: 18rem;">
+    <div class="card-body">
+      <h5 class="card-title"></h5>
+      {{job_post.job_title}}
+      {% for post in job_post %}
+      <h5 class="card-text">{{ post.job_title }}</h6>
+      <h5 class="card-text">{{ post.work_from_home }}</h5> 
+      <a href="{% url 'dashboard:showdatas' post.slug %}" class="card-link">Job id</a>
+      {% endfor %}  
+      {% for dt in job_detail%}
+      <h5 class="card-text">{{ dt.job_schedule }}</h5>
+      <h5 class="card-text">{{ dt.employment_type }}</h5>
+      <h5 class="card-text">{{ dt.contract_type }}</h5>
+      <h5 class="card-text">{{ dt.job_schedule }}</h5>
+      <h5 class="card-text">{{ dt.employment_type }}</h5>
+      <h5 class="card-text">{{ dt.supplement_pay }}</h5>
+      <h5 class="card-text">{{ dt.benefits }}></h5>
+      <br>
+      {% endfor %}
+    </div>
+</div>
