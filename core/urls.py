@@ -1,3 +1,4 @@
+from core.settings import MEDIA_ROOT
 from django.contrib import admin
 from django.urls import path
 from django.urls.conf import include
@@ -10,4 +11,6 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),
     path('dashboard/', include('dashboard.urls')),
     path('', views.index, name="home"),
-]
+] 
+
+

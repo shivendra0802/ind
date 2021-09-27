@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -9,7 +9,10 @@
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </head>
-<body>
+<body> -->
+{% extends 'accounts/home.html' %}  
+{% load static %}
+{% block content %}
     <div class="container py-5 h-100">
         <div class="row d-flex justify-content-center align-items-center h-100">
           <div class="col-12 col-md-8 col-lg-6 col-xl-5">
@@ -98,6 +101,4 @@
         <option value="Job Seeker">Job Seeker</option>
       </select> -->
     <input type="submit" id="btnSubmit" value="create user">
-    </form>
-</body>
-</html>
+    {% endblock content %}

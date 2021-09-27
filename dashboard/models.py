@@ -140,3 +140,9 @@ class Qualification(models.Model):
     
     def __str__(self):
         return self.education
+
+class Resumeupload(models.Model):
+    document = models.FileField(upload_to='documents/')
+
+    # def __str__(self):
+    #     return self.document

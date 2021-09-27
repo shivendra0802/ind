@@ -1,6 +1,7 @@
+from django.db.models.fields import files
 from django.views.generic.base import View
 from accounts import forms
-from dashboard.forms import JobDetailsForm, JobPostForm, QualificationForm
+from dashboard.forms import JobDetailsForm, JobPostForm, QualificationForm, DocumentForm
 from django.shortcuts import redirect, render
 from .forms import *
 from .models import *
@@ -8,7 +9,20 @@ from django.views.generic import ListView, DetailView
 from django.http import HttpResponse
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank, SearchHeadline
 from django.contrib.postgres.search import TrigramSimilarity, TrigramDistance
-# from .
+from django.core.files.storage import FileSystemStorage
+import PyPDF2
+import PyPDF2
+from django.http import FileResponse
+import os
+ 
+# from PyPDF2 import PdfFileReader
+# from pyPdf import PdfFileReader, PdfFileWriter
+from PyPDF2 import PdfFileWriter, PdfFileReader
+
+# from PyPDF2 import PdfFileReader, PdfFileWriter
+
+
+
 
 def jobpost(request):
     if request.method == "POST":
@@ -156,3 +170,51 @@ def post_search(request):
             # full text search
         results = JobPost.objects.filter(title__search=q)
     return render(request, 'dashboard/jobshowpage.html', {'form':form, 'results':results, 'q': q})  
+
+# def uploadpdf(request):
+#     if request.method == 'POST':
+#         file = request.FILES["resume"]
+#         # fs = FileSystemStorage()
+#         # file.save(files, files)
+#         print(file.name)
+#         print(file.size)
+#     return render(request, 'dashboard/upload.html')    
+
+
+def uploadpdf(request):
+    if request.method == 'POST':
+        form = DocumentForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            # return redirect('home')
+        else:
+            form = DocumentForm()
+    # context = {
+    #     {'form': form}
+    # }        
+    form = DocumentForm()
+    return render(request, 'dashboard/upload.html', {'form': form})
+
+def extract(request):
+    # pdf = PdfFileReader
+    filepath = os.path.join('media/documents', 'Data_Structures_and_Algorithms_Using_Python.pdf')
+    PDFfile = open(filepath, 'rb')
+    PDFfilereader = PyPDF2.PdfFileReader(PDFfile)
+
+    print(PdfFileReader.numPages)
+    #provide the page number
+    pages = PDFfilereader.getPage(33)
+
+    #extracting the text in PDF file
+    print(pages.extractText())
+
+    #close the PDF file
+    PDFfile.close()
+    return HttpResponse("done")
+
+
+
+def show_pdf(request):
+    filepath = os.path.join('media/documents', 'Data_Structures_and_Algorithms_Using_Python.pdf')
+    return FileResponse(open(filepath, 'rb'), content_type='application/pdf')
+

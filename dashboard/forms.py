@@ -1,6 +1,6 @@
 from django.db import models
 from django.db.models import fields
-from .models import JobPost, JobDetails, Qualification, CompanyInformation
+from .models import JobPost, JobDetails, Qualification, CompanyInformation,Resumeupload
 from django.forms import ModelForm
 
 
@@ -24,4 +24,9 @@ class QualificationForm(ModelForm):
 class CompanyInformationForm(ModelForm):
     class Meta:
         model = CompanyInformation
+        fields = '__all__'
+
+class DocumentForm(ModelForm):
+    class Meta:
+        model = Resumeupload
         fields = '__all__'
