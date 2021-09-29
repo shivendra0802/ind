@@ -68,8 +68,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     objects = CustomManager()
     
 
-    def __str__(self):
-        return self.email
+    # def __str__(self):
+    #     return self.email
 
 
 class Employer(models.Model):

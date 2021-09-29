@@ -8,6 +8,21 @@
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </head>
+<style>
+	.div{
+	margin:15px;
+}
+
+#marginbetweennavigationbarandjumbotron{
+	margin-top:60px;
+  background-color:white;
+  color:black;
+  border-radius:6px;
+  padding:20px;
+  margin-bottom:20px;
+}
+ul{list-style-type:none;}
+</style>
 <body>
 	<nav class="navbar navbar-expand-lg navbar navbar-dark bg-dark">
 		<div class="container-fluid">
@@ -23,6 +38,15 @@
 			  <li class="nav-item">
 				<a class="nav-link" href="{% url 'register' %}">Register</a>
 			  </li>
+			  <li class="nav-item">
+				<a class="nav-link" href="{% url 'contact' %}">contact</a>
+			  </li>
+			  <li class="nav-item">
+				<a class="nav-link" href="{% url 'about' %}">about</a>
+			  </li>
+			  <!-- <li class="nav-item">
+				<a class="nav-link active" aria-current="page" href="{% url 'dashboard:reviews'%}">Reviews</a>
+			  </li> -->
 			  <!-- <div class="collapse navbar-collapse" id="navbarScroll">
 				<ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
 				  <li class="nav-item">
@@ -52,6 +76,129 @@
 	  </nav>
 	  {% block content %}
 	  <h1>Homepage</h1>
+
+
+	  <body class="bg-primary">
+		<nav class="navbar navbar-default navbar-fixed-top">
+		  <div class="container-fluid">
+			<div class="navbar-header">
+			  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navopenclose" aria-expanded="false">
+			  <span class="sr-only">Toggle navigation</span>
+			  <span class="icon-bar"></span>
+			  <span class="icon-bar"></span>
+			  <span class="icon-bar"></span>
+			</button>
+			<p><img src="https://i.imgsafe.org/47f1f46772.png" class="img-responsive img-thumbnail "align="left" width="40" hspace="10"vspace="10"/><a href="#"class="navbar-brand">Job Portal</a></p>
+			</div>
+			<!-- <Whole Navigation bar is in Collapseable div> -->
+			<div class="collapse navbar-collapse" id="navopenclose">
+			  <ul class="nav navbar-nav">
+				<li class="dropdown">
+			  <a class="dropdown-toggle" data-toggle="dropdown" href="#">Menu 1
+			  <span class="caret"></span></a>
+				<ul class="dropdown-menu">
+				<li><a href="#">Menu 1 Item</a></li>
+				<li><a href="#">Menu 1 Item</a></li>
+				<li><a href="#">Menu 1 Item</a></li> 
+				<li><a href="#">Menu 1 Item</a></li>
+				<li><a href="#">Menu 1 Item</a></li>
+				<li><a href="#">Menu 1 Item</a></li>
+			  </ul>
+				</li>
+				
+				<li class="dropdown">
+			  <a class="dropdown-toggle" data-toggle="dropdown" href="#">Menu 2
+			  <span class="caret"></span></a>
+				<ul class="dropdown-menu">
+				<li><a href="#">Menu 2 Item</a></li>
+				<li><a href="#">Menu 2 Item</a></li>
+				<li><a href="#">Menu 2 Item</a></li>
+				<li><a href="#">Menu 2 Item</a></li>
+				<li><a href="#">Menu 2 Item</a></li>
+				<li><a href="#">Menu 2 Item</a></li>
+			  </ul>
+			  </li>
+				
+			  </ul>
+			  
+			  <ul class="nav navbar-nav navbar-right">
+				<li><a href="#" class="navbar-right"><i class="glyphicon glyphicon-log-in"></i> Login</a></li>
+				<li><a href="#"><i class="glyphicon glyphicon-user"></i> Sign UP</a></li>
+			  </ul>
+		</nav>
+		</div>
+		</div>
+	  
+		<!-- End of Navigation and begining of Jumbotron -->
+	  
+		<div class="container" id="marginbetweennavigationbarandjumbotron">
+		  <div class="row">
+			<div class="col-xs-12">
+			  
+			  <h2 class="text-center text-primary" style="margin:0px;padding:0px;font-family: 'Droid Sans', sans-serif;">Search Jobs, Across all India.</h2><hr>
+	  
+	  
+		  <form class="form-group form-inline text-center">
+		   
+			<input type="text" class="form-control " placeholder="Enter Job Title,Desigination,Keywords" style="width:300px;margin:10px;">
+		 
+		  
+		  <select class="form-control"style="width:300px;margin:10px;">
+					<option>Select Experience</option>
+					<option>0 Year | Fresher</option>
+					<option>1 Year</option>
+					<option>2 Years</option>
+					<option>3 Years</option>
+					<option>4 Years</option>
+					<option>5 Year</option>
+					<option>6 Years</option>
+					<option>7 Years</option>
+					<option>8 Years</option>
+					<option>9 Years</option>
+					<option>10 Years</option>
+					<option>More than 10 Years</option>
+					</select>
+		 <p class="text-center">
+		   <button type="submit" class="btn-primary text-center form-control"style="width:300px;">Search</button>
+			</p>
+		  </form>
+			  <h3 class="text-center text-primary">OR</hr>
+	  
+				<div style="height:0px;overflow:hidden;">
+				  <input type="file" id="fileInput" name="fileInput" />
+				</div>
+				<p class="text-center clear-float">
+				  <a href="#" class="btn btn-primary btn-lg" onclick="chooseFile();">Upload Your CV | Resume</a>
+				</p>
+				<p class="text-center text-primary">We Will Search Best Matching Jobs for You.</p>
+	  
+	  
+			</div>
+		  </div>
+		</div>
+		
+		<!-- End of Jumbotron -->
+		
+		
+		<!-- <div class="container text-primary">
+		  <div class="text-primary"style="background-color:white;border-radius: 6px;
+		  padding: 20px;" >
+		  <div class="row">
+			<div class="col-xs-12  col-sm-4 text-center"> -->
 	  {% endblock content %}
+<script>
+
+$( document ).ready(function() {
+
+});
+
+function chooseFile() {
+      $("#fileInput").click();
+   }
+
+</script>	  
 </body>
+<footer>
+	{% include "accounts/footer.html" %}
+</footer>
 </html>

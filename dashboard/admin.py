@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import JobPost, JobDetails, Qualification, CompanyInformation, Resumeupload
+from .models import JobPost, JobDetails, Qualification, CompanyInformation, Resumeupload, Subscriber, Subscription
 
 
 # Register your models here.
@@ -8,3 +8,5 @@ admin.site.register(JobDetails)
 admin.site.register(Qualification)
 admin.site.register(CompanyInformation)
 admin.site.register(Resumeupload)
+admin.site.register(Subscriber)
+admin.site.register(Subscription)

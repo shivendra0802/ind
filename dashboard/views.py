@@ -21,7 +21,8 @@ from PyPDF2 import PdfFileWriter, PdfFileReader
 
 # from PyPDF2 import PdfFileReader, PdfFileWriter
 
-
+def basepage(request):
+	return render(request, 'dashboard/base.html')
 
 
 def jobpost(request):
@@ -54,8 +55,48 @@ def jobpost(request):
         fm = JobPostForm()
     return render(request, 'dashboard/dashboard.html', {"fm": fm})
 
+def get_jobs(request):
+    # get all jobs from the DB
+    jobs = JobPost.objects.all()
+    return render(request, 'dashboard/getpost.html', {'jobs': jobs})
 
+def get_job(request, id):
+    job = JobPost.objects.get(pk=id)
+    return render(request, 'job.html', {'job': job})  
 
+# def subscribe(request, id):
+#     job = JobPost.objects.get(pk=id)
+#     sub = Subscriber(email=request.POST['email'])
+#     sub.save()
+
+#     subscription = Subscription(user=sub, job=job)
+#     subscription.save()
+
+#     payload = {
+#       'job': job,
+#       'email': request.POST['email']
+#     }
+#     return render(request, 'subscribed.html', {'payload': payload})      
+
+from dashboard.signals import new_subscriber
+
+def subscribe(request, id):
+    job = JobPost.objects.get(pk=id)
+    subscriber = Subscriber(email=request.POST['email'])
+    subscriber.save()
+
+    subscription = Subscription(user=subscriber, job=job, email=subscriber.email)
+    subscription.save()
+
+    # Add this line that sends our custom signal
+    new_subscriber.send(sender=subscription, job=job, subscriber=subscriber)
+    print('--------- email')
+
+    payload = {
+      'job': job,
+      'email': request.POST['email']
+    }
+    return render(request, 'subscribed.html', {'payload': payload})
 
 
 def jobdetailview(request):
@@ -218,3 +259,51 @@ def show_pdf(request):
     filepath = os.path.join('media/documents', 'Data_Structures_and_Algorithms_Using_Python.pdf')
     return FileResponse(open(filepath, 'rb'), content_type='application/pdf')
 
+
+from dashboard.forms import ReviewForm
+from django.views.generic.edit import FormView
+from django.views import View
+
+from django.http import HttpResponse
+
+
+class ReviewEmailView(FormView):
+    template_name = 'dashboard/review.html'
+    form_class = ReviewForm
+
+    def form_valid(self, form):
+        form.send_email()
+        msg = "Thanks for the review!"
+        return HttpResponse(msg)
+
+
+from django.http.response import HttpResponse
+from django.shortcuts import render
+from dashboard.tasks import test_func
+from dashboard.tasks import send_mail_func
+
+# Create your views here.
+
+def test(request):
+    test_func.delay()
+    return HttpResponse("Done")        
+
+
+def send_mail_to_all(request):
+    send_mail_func.delay()
+    return HttpResponse("Sent")
+
+
+from celery.schedules import crontab
+from django.http.response import HttpResponse
+from django.shortcuts import render
+from .tasks import test_func
+from dashboard.tasks import send_mail_func
+from django_celery_beat.models import PeriodicTask, CrontabSchedule
+import json
+
+
+def schedule_mail(request):
+    schedule, created = CrontabSchedule.objects.get_or_create(hour = 17, minute = 55)
+    task = PeriodicTask.objects.create(crontab=schedule, name="schedule_mail_task_"+"2", task='dashboard.tasks.send_mail_func')#, args = json.dumps([[2,3]]))
+    return HttpResponse("Done")

@@ -1,0 +1,8 @@
+### celery beat command
+
+
+celery -A core.celery beat -l info
+
+
+#### celery worker command
+celery -A core.celery worker -l info

@@ -1,0 +1,606 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <!--  Meta  -->
+  <!-- <meta charset="UTF-8" />
+  <title>My New Pen!</title>
+
+ 
+  <!--  Styles  -->
+  <!-- <link rel="stylesheet" href="styles/index.css"> -->
+<!-- </head> --> 
+{% extends 'accounts/home.html' %}  
+{% load static %}
+{% block content %}
+<style>
+    * {
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
+}
+.team {
+  font-family: "Montserrat";
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr) ) ;
+  max-width: 1200px;
+  grid-gap: 20px;
+  margin: 0px auto;
+  justify-items: center;
+  align-items: center;
+}
+
+.title h2 {
+  font-size: 1.8rem;
+  
+}
+
+.team-member {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  overflow: hidden;
+  position: relative;
+}
+
+.team-member img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  
+}
+
+.bio {
+  display: none;
+}
+
+.overlay {
+  position:absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0,0,0,0.5);
+  color: white;
+  font-size: 1.5rem;
+  opacity: 0;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  
+}
+
+
+.overlay h3 {
+  padding: 0px 5px;
+}
+
+.overlay:hover {
+  opacity: 100%;
+}
+
+#modal{
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.7);
+  position: absolute;
+  top: 0;
+  justify-content: center;
+  align-items: center;
+  font-family: "Montserrat";
+  display: none;
+  
+}
+
+#modal-content{
+  width: 500px;
+  max-height: 600px;
+  background-color: white;
+  border-radius: 5px;
+  padding: 40px;
+  overflow: auto;
+  line-height: 1.5rem;
+  margin: 0 20px;
+  position: relative;
+  
+}
+
+#modal-content h3 {
+  margin-bottom: 10px;
+}
+
+#modal-content img {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+  float: left;
+  padding: 0px 18px 10px 0px;
+  border-radius: 50%;
+
+}
+
+#modal-content::-webkit-scrollbar { 
+  width: 0 !important;
+  overflow: -moz-scrollbars-none;
+  -ms-overflow-style: none;
+}
+
+#modal-content p{
+  margin:0;
+}
+#modal-content p + p{
+  margin-top:1rem;
+}
+
+.close {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  font-size: 2.25rem;
+  transform: rotate(45deg);
+  cursor: pointer;
+  color: #929292;
+  transition: all 0.2s ease;
+}
+
+.close:hover {
+  color: rgb(0,0,0);
+}
+
+@media only screen and (max-width: 500px) {
+  #modal-content {
+     display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}
+</style>
+<body>
+
+ <div class="team">
+    <div class="title"><h2>PTAP Commisioners</h2></div>
+    <div class="team-member">
+      <img src="https://higherlogicdownload.s3.amazonaws.com/MAGNETLEARNINGCOMMUNITY/ca7e2a4d-1b73-4600-bc83-cdf3bbcad440/UploadedImages/PTAP%20Images/angelica-jackson.jpg" alt="" />
+      <div class="overlay">
+        <h3>Angelica Jackson</h3>
+      </div>
+
+      
+      <div class="bio">
+        <p>
+          I grew up in California my whole life. I currently work at the hospital I was born at. Providence St. Joseph medical center is where I got my first job as emergency room nurse. I currently am training as a charge nurse and I am currently getting my mobile
+          intensive care nurse certification through the Los Angeles County. I have future aspirations to go into executive leader ship. I currently am getting my masters in healthcare administration and should be finished by spring of 2020. I love nursing
+          and all the aspects of care. As I continue to grow into the nurse that I want to be: I realize that I am very much a nurse advocate and know that my calling is executive leadership. I currently serve as the nursing advancement and excellence
+          Council chair at my hospital along with being the co-chair for my unit based council. I currently serve as a preceptor to new grads as well. I am looking forward to meeting all of you!
+        </p>
+      </div>
+
+    </div>
+    <div class="team-member">
+      <div class="overlay">
+        <h3>Christine Young</h3>
+      </div>
+
+      <img src="https://higherlogicdownload.s3.amazonaws.com/MAGNETLEARNINGCOMMUNITY/ca7e2a4d-1b73-4600-bc83-cdf3bbcad440/UploadedImages/PTAP%20Images/christine-young.jpg" alt="" />
+      <div class="bio">
+       <p>
+          Christine Young, MSN, MBA, RN, NEA-BC is the Vice President, Patient
+          Services and Chief Nursing Officer at Akron Children’s Hospital in
+          Akron, Ohio. Ms. Young has 26 years of nursing experience, with a
+          focus on women’s and children’s health. She has served in a variety of
+          nursing leadership roles for 19 years, including charge nurse,
+          assistant head nurse, nurse manager, nurse director and currently
+          chief nursing officer.
+        </p>
+        <p>
+          Under the direction of Ms. Young, the nurse residency program at Akron
+          Children’s Hospital was accredited with distinction by the ANCC
+          Practice Transition Accreditation Program in 2018. She was appointed
+          in 2019 to serve on the Commission on Accreditation in Practice
+          Transition Programs (COAPTP), representing the constituency of chief
+          nursing officer in a hospital or healthcare setting.
+        </p>
+        <p>
+          Ms. Young has presented and published nationally in the areas of
+          strategic planning for nurse staffing and nurse workforce
+          diversity.This includes strategic planning for staffing that decreased
+          premium labor costs significantly and improved the work environment
+          for nurses. She has also presented on a strategic program to improve
+          nurse workforce diversity by engaging nursing students prior to
+          graduation. Ms. Young has also served as an abstract reviewer for the
+          ANCC Magnet® Conference (2017)
+        </p>
+        <p>
+          Serving on the Board of Directors for the Ohio Organization of Nurse
+          Executives, Ms. Young is the chairperson of the Communication
+          Committee. She is also a member of the American Organization of Nurse
+          Executives, the American College of Healthcare Executives and the
+          Society of Pediatric Nursing.
+        </p>
+        <p>
+          Ms. Young holds a Bachelor’s Degree in Biological Science from Bowling
+          Green State University, a Bachelor of Science in Nursing from Ursuline
+          College and a Master of Science in Nursing and Business Administration
+          in Health Care Management from the University of Phoenix.She is also
+          board certified through the ANCC as a Nurse Executive, Advanced.
+        </p>
+      </div>
+
+    </div>
+    <div class="team-member">
+      <div class="overlay">
+        <h3>Dawna Cato</h3>
+      </div>
+
+      <img src="https://higherlogicdownload.s3.amazonaws.com/MAGNETLEARNINGCOMMUNITY/ca7e2a4d-1b73-4600-bc83-cdf3bbcad440/UploadedImages/PTAP%20Images/dawna-cato.jpg" alt="" />
+      <div class="bio">
+        <p>
+          Dawna L. Cato PhD., RN is the President of Transition to Professional
+          Practice (TTPP) Nurse Consulting and the Vice President of Clinical
+          Care Services for PreferUS Healthcare. Dr. Cato has 22 years of
+          nursing experience. Her background includes a variety of nursing
+          specialties to include clinical and leadership roles. Dr. Cato
+          obtained her BSN and Master’s in the Science of Nursing with a
+          specialization in Nursing Education from Grand Canyon University. In
+          2013, Dr. Cato received PhD with a specialization in Nursing Education
+          from Capella University. Dr. Cato is involved in several local, state,
+          and national organizations.
+        </p>
+        <p>
+          Dr. Cato is a local, national, and international presenter and
+          publisher. She currently volunteers for many organizations to advance
+          professional nursing. Dr. Cato currently holds a Member at Large
+          position for the American Nurses Credentialing Center (ANCC)
+          Commissioner on Accreditation. She is the President of the Arizona
+          Nurses Association Special Interest Group Nurse Educators and board
+          member of the Arizona Heart Foundation
+        </p>
+        <p>
+          Dr. Cato’s dissertation explored the
+          <em
+            >relationship between a BSN Nurse Residency Program and
+            evidence-based practice of the incumbent nursing workforce</em
+          >.
+        </p>
+      </div>
+
+    </div>
+    <div class="team-member">
+      <div class="overlay">
+        <h3>Janet Silvester</h3>
+      </div>
+
+      <img src="https://higherlogicdownload.s3.amazonaws.com/MAGNETLEARNINGCOMMUNITY/ca7e2a4d-1b73-4600-bc83-cdf3bbcad440/UploadedImages/PTAP%20Images/janet-silvester.jpg" alt="" style="object-position: 50% 10%;"/>
+      <div class="bio">
+        <p>
+          Janet A. Silvester, Pharm.D., M.B.A., FASHP, is Vice President of the
+          Accreditation Services Office and is responsible for providing
+          strategic direction for all ASHP accreditation programs and services.
+        </p>
+        <p>
+          Janet holds a B.S. in Pharmacy from the Medical College of Virginia,
+          Virginia Commonwealth University, a Pharm.D. from Creighton University
+          and a Masters in Business from James Madison University. Janet spent
+          34 years in hospital practice and was Director of Pharmacy and
+          Emergency services at Martha Jefferson Hospital in Charlottesville,
+          Va.
+        </p>
+        <p>
+          Janet is past president of the Virginia Society of Health System
+          Pharmacists, and Past president of the American Society of Health
+          System Pharmacists. She is past recipient of the Virginia Health
+          System Pharmacist of the Year award, the RD Anderson Distinguished
+          Leadership award, and the Pharmacy Alumnus Service award from the
+          Medical College of Virginia Alumni Association of Virginia
+          Commonwealth University. Janet is also the recipient of the 2012
+          American Society of Health System Pharmacists Award for Distinguished
+          Leadership in Health System Pharmacy Practice.
+        </p>
+      </div>
+
+    </div>
+    <div class="team-member">
+      <div class="overlay">
+        <h3>Jean Shinners</h3>
+      </div>
+
+      <img src="https://higherlogicdownload.s3.amazonaws.com/MAGNETLEARNINGCOMMUNITY/ca7e2a4d-1b73-4600-bc83-cdf3bbcad440/UploadedImages/PTAP%20Images/jean-shinners.jpg" alt="" />
+      <div class="bio">
+        <p>
+          Jean Shinners, PhD, RN-BC is the Executive Director at Ver sant Center
+          for the Advancement of Nursing® (VCAN®). Jean has 40 years of nursing
+          experience in a wide array of educational, clinical, and leadership
+          positions. Dr. Shinners is the Lead Nurse Planner with Versant’s
+          Provider Unit. Dr. Shinners has been active with the American Nurses
+          Credentialing Center (ANCC) as an appraiser, on the accreditation
+          review committee (ARC), and since 2012 on the Commission for
+          Accreditation (COA). Dr. Shinners served as vice chair of the
+          commission from 2015 thru 2017.
+        </p>
+        <p>
+          Dr. Shinners has presented and published both nationally and
+          internationally in the areas of competency management and RNs in
+          transition. This includes transition program design and development,
+          preceptor education, and program outcomes. Dr. Shinners also speaks
+          nationally in the area of continuing nursing education and
+          professional development. In her current role, she is responsible for
+          competency assessment strategies and practice transition outcomes and
+          research.
+        </p>
+        <p>
+          An active leader in the Association for Nursing Professional
+          Development (ANPD), Jean is certified in nursing professional
+          development and was a chapter author: Application of the Nursing
+          Professional Development: Scope and Standards of Practice. In Smith,
+          C. M., &amp; Harper, M. G. (Eds.). Leadership in nursing professional
+          development: An organizational and systems focus. Dr. Shinners was
+          also a member of the 2016 Nursing Professional Development (NPD) Scope
+          and Standards Workgroup. She has been on several national workgroups
+          to address advancing interprofessional continuing education. These
+          include the Alliance for Continuing Education in the Health
+          Professions and the National Collaborative for Improving the Clinical
+          Learning Environment.
+        </p>
+        <p>
+          Dr. Shinners holds a diploma from Milwaukee County General Hospital
+          School of Nursing (1976), BSN and MSN degrees from Florida Atlantic
+          University and a PhD from Capella University. Dr. Shinners is a Sigma
+          Theta Tau Virginia Henderson Fellow and is the current associate
+          editor for the Journal of Continuing Education in Nursing.
+        </p>
+      </div>
+
+    </div>
+    <div class="team-member">
+      <div class="overlay">
+        <h3>Kaleen Cullen</h3>
+      </div>
+
+      <img src="https://higherlogicdownload.s3.amazonaws.com/MAGNETLEARNINGCOMMUNITY/ca7e2a4d-1b73-4600-bc83-cdf3bbcad440/UploadedImages/PTAP%20Images/kaleen-cullen.jpg" alt="" />
+      <div class="bio">
+        <p>
+          Kaleen Cullen is the Vice President of Clinical Education for Peak
+          Vista Community Health Centers in Colorado. Dr. Cullen’s position
+          includes oversight of the Advanced Practice Registered Nurse Primary
+          Care Fellowship and Family Practice Medical Residency, as well as
+          initiating new education and training opportunities at the Federally
+          Qualified Health Center. Dr. Cullen designed and initiated the Primary
+          Care Nurse Practitioner Fellowship at Peak Vista which earned Practice
+          Transition Accreditation Program (PTAP) accreditation in 2017. Current
+          projects include a high school Health Academy out-reach program for
+          students in underserved communities and integrated Fellowship and
+          Residency training. Dr. Cullen maintains a patient panel as a Family
+          Nurse Practitioner at Peak Vista and is Medical Director of the
+          Fellowship clinic.
+        </p>
+        <p>
+          Dr. Cullen has served as faculty at the graduate and undergraduate
+          levels in nursing education. She has consulted in the areas of
+          transition program development, design, and innovation. Dr. Cullen has
+          served as a PTAP appraiser for the American Nurses Credentialing
+          Center in 2018 before being appointed to the Commission for
+          Accreditation. Dr. Cullen is a second author :Windey, M.A. &amp;
+          Cullen, K. (2018). Advanced Practice Registered Nurse Fellowships.
+          34(1): 41-42, January February 2018 and contributing author: Nuhfer,
+          E., Chakraborty, D. Cullen, et al. (2013). Understanding
+          Cinderella-Expanding an Essential Conversation on the Metadiscipline
+          of Technology: Educating in Fractal Patterns XXXVII The National
+          Teaching and Learning Forum. (22) 2, 8-11
+        </p>
+        <p>
+          Dr. Cullen holds a Baccalaureate degree from Beth El College of
+          Nursing (University of Colorado at Colorado Springs), a Master’s
+          degree from Colorado State University Pueblo (Family Nurse
+          Practitioner/Acute Care Nurse Practitioner), and a PhD in Nursing
+          Education from the University of Northern Colorado at Greeley. She is
+          a member of Sigma Theta Tau, Phi Kappa Phi, the American Nurses
+          Association and American Association of Nurse Practitioners. Her
+          research interests are related to socio-cultural impacts on health
+          care and professional health care education.
+        </p>
+      </div>
+
+    </div>
+    <div class="team-member">
+      <div class="overlay">
+        <h3>Lya M. Stroupe</h3>
+      </div>
+
+      <img src="https://higherlogicdownload.s3.amazonaws.com/MAGNETLEARNINGCOMMUNITY/ca7e2a4d-1b73-4600-bc83-cdf3bbcad440/UploadedImages/PTAP%20Images/lya-stroupe.jpg"  style="object-position: 50% 20%;"/>
+      <div class="bio">
+       <p>
+          Dr. Lya M. Stroupe is the Manager of Nursing Research and Professional
+          Development, Magnet® Program Director and the Transition to Practice
+          Program Director at WVU Medicine-WVU Hospitals in Morgantown, WV. In
+          addition to leading councils in the flagship hospital within WVU
+          Medicine, Lya has led system wide initiatives that include
+          implementation of care plans and patient education.
+        </p>
+        <p>
+          Lya has received grants for her research in pediatrics as well as
+          projects that include nursing safety and the care for the veteran. She
+          has been published in the Journal of Hospice &amp; Palliative Nursing,
+          the Journal of Nursing Administration and the Journal of Pediatric
+          Nursing. She also serves on faculty in the West Virginia University
+          Schools of Nursing and Medicine.
+        </p>
+        <p>
+          Dr. Stroupe currently serves as a Co-Chair for the Commission for
+          Accreditation for the American Nurses Credentialing Center (ANCC). She
+          serves as co-chair of the Elsevier Clinical Solutions Patient
+          Engagement Editorial Board. Lya is a member of the WVU Institutional
+          Review Board. She is the immediate past president of the Alpha Rho
+          Chapter of Sigma Theta Tau International as serves as a board member
+          for WVONE.
+        </p>
+        <p>
+          Lya has been a presenter at local, state, national and international
+          conferences. Lya also works as a pediatric nurse practitioner in the
+          WVU Medicine Children’s Hospital and is involved in many service
+          projects throughout the state of West Virginia for children, including
+          the “Tomorrow is Mine” Camp. She also serves on the International
+          Congenital Heart Defect Awareness Quilt Project Advisory Board.
+        </p>
+        <p>
+          Stroupe holds a BSN degree from West Virginia University and MSN and
+          DNP degrees from the Medical University of South Carolina in
+          Charleston. Stroupe also has a Doctorate in Piano Performance as
+          serves as an accompanist for recitals and is the principal pianist for
+          the Ohio Valley Symphony. She is the Director of Music and Director of
+          Children’s Education and Music at Wesley United Methodist Church in
+          Morgantown, WV.
+        </p>
+      </div>
+
+    </div>
+    <div class="team-member">
+      <div class="overlay">
+        <h3>Michael Ward</h3>
+      </div>
+
+      <img src="https://higherlogicdownload.s3.amazonaws.com/MAGNETLEARNINGCOMMUNITY/ca7e2a4d-1b73-4600-bc83-cdf3bbcad440/UploadedImages/PTAP%20Images/michael-ward.jpg" alt="" />
+      <div class="bio">
+       <p>
+          Michael Ward MBA, BSN, RN is the Division Director of clinical
+          onboarding and education for BAYADA Home Health Care, a national home
+          care company. In addition to the residency program, Michael oversees
+          the simulation program comprised of over fifty mid and high fidelity
+          simulation labs. Mr. Ward served on the Content Expert panel for the
+          PTAP program, prior to his appointment to the Board of Commissioners.
+          Michael has been a registered nurse for over 30 years.
+        </p>
+        <p>
+          Michael has extensive nurse management experience across a variety of
+          clinical environments. He was previously a Vice President and CNO for
+          Osteopathic Medical Center in Philadelphia. He also served as National
+          Director for a national registered nurse staffing agency. Prior to his
+          current corporate position, he was the director of several home care
+          service offices serving medically complex mechanically ventilated
+          children.
+        </p>
+        <p>
+          Mr. Ward is a graduate of Einstein Medical Center School of Nursing
+          and holds a BBA in Marketing from Temple University, a BSN from
+          American Sentinel University, and a MBA in Health Administration from
+          Philadelphia University. He is currently pursuing his MSN in Nursing
+          Education. Mr. Ward also possesses a post graduate certificate in
+          Nursing Leadership Excellence from Villanova University, and a
+          certificate in Simulation Management from the University of Southern
+          Indiana.
+        </p>
+        <p>
+          In addition to his work with the PTAP committee at the American Nurses
+          Credentialing Center, Michael is a member of the Philadelphia Area
+          Simulation Consortium, and served as host of this year’s annual
+          symposium. Mr. Ward just ended a nine year appointment as an external
+          advisory board member for the nursing home for the Sisters of the
+          Immaculate Heart of Mary, where he chaired the sub-committee for Heath
+          Care and Ethics. He is also on the panel review board for Nursing
+          Economics magazine.
+        </p>
+      </div>
+
+    </div>
+    <div class="team-member">
+      <div class="overlay">
+        <h3>Melinda Cooling</h3>
+      </div>
+
+      <img src="https://higherlogicdownload.s3.amazonaws.com/MAGNETLEARNINGCOMMUNITY/ca7e2a4d-1b73-4600-bc83-cdf3bbcad440/UploadedImages/PTAP%20Images/melinda-cooling.jpg" alt="" />
+      <div class="bio">
+        <p>
+          Melinda Cooling is the Vice President of Advanced Practice at OSF
+          Healthcare.She started her career at OSF 20 years ago serving in
+          clinical and leadership roles.She received her BSN from St
+          Francis Medical Center College of Nursing.She later pursued
+          education to become a Family Nurse Practitioner (FNP) at University of
+          Illinois.
+        </p>
+        <p>
+          Melinda began in practice as a FNP at the OSF Medical Group (OSFMG)
+          Roanoke and Washington practice.In addition, she took an
+          informal leadership role in the Peoria region for Advanced Practice at
+          that time.As time progressed, she pursued her Masters of
+          Business Administration in Health Care Administration, Nursing
+          Education Teaching Certificate, and Doctoral degree in
+          Nursing.She then became the Director of Advanced Practice for
+          OSFMG Peoria, serving as interim for St Francis Medical Center for a
+          short period of time as well prior to her appointment as Vice
+          President.
+        </p>
+        <p>
+          She has been involved as a nursing educator for nursing at Saint
+          Francis Medical Center College of Nursing, Bradley University, and
+          Maryville University.
+        </p>
+        <p>
+          Melinda has experience in research serving as a principal investigator
+          and co-investigator on several studies.She is a mentor for
+          advanced practice nurses who are formally enrolled in DNP programs as
+          well.From a national perspective, she is an advisory board
+          member for Advanced Practice Provider Executives (APPex), a member of
+          Illinois Society of Advanced Practice Nurses, American Association of
+          Nurse Practitioners, and American Organization of Nurse
+          Executives.She also sits on the thought leaders councils for
+          Sullivan Cotter and Center for Advancing Provider Practices (CAP2) for
+          advanced practice.
+        </p>
+      </div>
+
+    </div>
+    
+    
+  </div>
+  <div id="modal">
+    <div id="modal-content">
+      <div class="close">+</div>
+      <img src="https://higherlogicdownload.s3.amazonaws.com/MAGNETLEARNINGCOMMUNITY/ca7e2a4d-1b73-4600-bc83-cdf3bbcad440/UploadedImages/PTAP%20Images/angelica-jackson.jpg" alt="">
+      <h3>Angelica Jackson</h3>
+      <div class="modal-bio"><p>
+          I grew up in California my whole life. I currently work at the hospital I was born at. Providence St. Joseph medical center is where I got my first job as emergency room nurse. I currently am training as a charge nurse and I am currently getting my mobile
+          intensive care nurse certification through the Los Angeles County. I have future aspirations to go into executive leader ship. I currently am getting my masters in healthcare administration and should be finished by spring of 2020. I love nursing
+          and all the aspects of care. As I continue to grow into the nurse that I want to be: I realize that I am very much a nurse advocate and know that my calling is executive leadership. I currently serve as the nursing advancement and excellence
+          Council chair at my hospital along with being the co-chair for my unit based council. I currently serve as a preceptor to new grads as well. I am looking forward to meeting all of you!
+        </p></div>
+    </div>
+  </div>
+  <script>
+      const teamMembers = document.getElementsByClassName("team-member");
+const close = document.getElementsByClassName("close")[0];
+const modal = document.getElementById("modal");
+const modalContent = document.getElementById("modal-content");
+Array.from(teamMembers).forEach(member => member.addEventListener('click', openModal));
+
+function openModal(e){
+  const target = (e.target.tagName === "H3")? e.target.parentNode.parentNode : e.target.parentNode;
+  const name = target.getElementsByTagName("H3")[0].innerText;
+  const img = target.getElementsByTagName("IMG")[0].src;
+  const bio = target.getElementsByClassName("bio")[0].innerHTML;
+  modalContent.getElementsByTagName("IMG")[0].src = img;
+  modalContent.getElementsByTagName("H3")[0].innerText = name;
+  modalContent.getElementsByClassName("modal-bio")[0].innerHTML = bio;
+  modalContent.getElementsByTagName("IMG")[0].style.objectPosition = target.getElementsByTagName("IMG")[0].style.objectPosition;
+  modal.style.display = "flex";
+}
+
+close.addEventListener("click", (e) => {
+  modal.style.display = "none";
+})
+
+window.addEventListener('click', (e) => {
+  if(e.target == modal){
+    modal.style.display = "none";
+  }
+})
+  </script>
+</body>
+
+{% endblock content %}
+
+</html>

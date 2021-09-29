@@ -1,0 +1,18 @@
+{% extends 'accounts/home.html' %}  
+{% load static %}
+{% block content %}    
+
+<body>
+    <h2> Welcome to the Jobs board </h2>
+
+    {% for job in jobs %}
+      <div>
+        <a href="/jobs/{{ job.id }}">{{ job.title }} at {{ job.company }}</a>
+        <p>
+          {{ job.details }}
+        </p>
+      </div>
+    {% endfor %}
+
+</body>
+{% endblock content %}

@@ -17,13 +17,19 @@ from django.contrib.auth import logout
 
 
 
+def new(request):
+    return render(request, 'accounts/new.html')
 
-def userlogin(request):
-	return render(request, 'accounts/login.html')
 
 def index(request):
 	return render(request, 'accounts/home.html')
 
+
+def contact(request):
+    return render(request, 'accounts/contactus.html')
+
+def about(request):
+    return render(request, 'accounts/about.html')    
 
 class RegistrationView(View):
     def get(self, request):

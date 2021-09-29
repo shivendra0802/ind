@@ -146,3 +146,23 @@ class Resumeupload(models.Model):
 
     # def __str__(self):
     #     return self.document
+
+
+class Subscriber(models.Model):
+    email = models.CharField(max_length=255, blank=False, unique=True)
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.email
+
+
+class Subscription(models.Model):
+    email = models.CharField(max_length=255, blank=False, unique=True)
+    user = models.ForeignKey(Subscriber, related_name="subscriptions", on_delete=models.CASCADE)
+    job = models.ForeignKey(JobPost, related_name="Jobpost", on_delete=models.CASCADE)
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.email

@@ -2,9 +2,9 @@
 # from accounts.views import RegistrationView, LoginView,LogoutView
 from accounts import views
 from django.urls.conf import path
-from .views import jobpost, jobdetailview,company_info,qualifi, showdata , uploadpdf, show_pdf, extract
+from .views import jobpost, jobdetailview,company_info,qualifi, showdata, subscribe , uploadpdf, show_pdf, extract,basepage,test,send_mail_to_all,schedule_mail, get_jobs, subscribe, get_job
 from dashboard import views
-from .views import ShowView
+from .views import ReviewEmailView
 from django.conf.urls.static import static
 from django.conf import settings
 app_name='dashboard'
@@ -20,6 +20,15 @@ urlpatterns = [
     path('upload/', views.uploadpdf, name="upload"),
     path('show/', views.show_pdf, name="show"),
     path('extract/', views.extract, name="extract"),
+    path('base', views.basepage, name="base"),
+    # path('review', ReviewEmailView.as_view(), name="review")
+    path('reviews/', ReviewEmailView.as_view(), name="reviews"),
+    path('test', views.test, name="test"),
+    path('sendmail', views.send_mail_to_all, name="sendmail"),
+    path('schedule', views.schedule_mail, name="schedule"),
+    path('getjob', views.get_jobs, name="getjobs"),
+    path('jobs/<int:id>', get_job, name="job_view"),
+    path('jobs/<int:id>/subscribe', subscribe, name="subscribe_view"),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
