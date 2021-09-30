@@ -1,7 +1,9 @@
 from django.db import models
 from django.db.models import fields
-from .models import JobPost, JobDetails, Qualification, CompanyInformation,Resumeupload
+from dashboard.models import JobDetails, JobPost, Qualification, Resumeupload, CompanyInformation, Subscriber,MailMessage
 from django.forms import ModelForm
+# from dashboard.models import JobPost
+from django import forms
 
 
 class JobPostForm(ModelForm):
@@ -31,8 +33,17 @@ class DocumentForm(ModelForm):
         model = Resumeupload
         fields = '__all__'
 
+class SubscibersForm(forms.ModelForm):
+    class Meta:
+        model = Subscriber
+        fields = ['email', ]
 
-from django import forms
+
+class MailMessageForm(forms.ModelForm):
+    class Meta:
+        model = MailMessage
+        fields = '__all__'
+
 # from dashboard.tasks import send_review_email_task
 
 

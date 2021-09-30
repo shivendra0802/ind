@@ -1,6 +1,8 @@
+from datetime import timezone
 from django.db.models.fields import files
 from django.views.generic.base import View
 from accounts import forms
+from dashboard import email
 from dashboard.forms import JobDetailsForm, JobPostForm, QualificationForm, DocumentForm
 from django.shortcuts import redirect, render
 from .forms import *
@@ -14,7 +16,8 @@ import PyPDF2
 import PyPDF2
 from django.http import FileResponse
 import os
- 
+from django.core.signals import request_finished
+from django.dispatch import receiver, Signal 
 # from PyPDF2 import PdfFileReader
 # from pyPdf import PdfFileReader, PdfFileWriter
 from PyPDF2 import PdfFileWriter, PdfFileReader
@@ -25,7 +28,63 @@ def basepage(request):
 	return render(request, 'dashboard/base.html')
 
 
+from .forms import SubscibersForm, MailMessageForm
+from django.contrib import messages
+
+def subscr(request):
+    if request.method == 'POST':
+        form = SubscibersForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Subscription Successful')
+            return redirect('/')
+    else:
+        form = SubscibersForm()
+    context = {
+        'form': form,
+    }
+    return render(request, 'dashboard/subscribed.html', context)
+
+from django.core.mail import send_mail
+from django_pandas.io import read_frame
+from django.core.mail import send_mail
+from django.urls import reverse
+
+def mail_letter(request):
+    emails = Subscriber.objects.all()
+    df = read_frame(emails, fieldnames=['email'])
+    mail_list = df['email'].values.tolist()
+    print(mail_list)
+    if request.method == 'POST':
+        form = MailMessageForm(request.POST)
+        if form.is_valid():
+            form.save()
+            title = form.cleaned_data.get('title')
+            message = form.cleaned_data.get('message')
+            send_mail(
+                title,
+                message,
+                '',
+                mail_list,
+                fail_silently=False,
+            )
+            messages.success(request, 'Message has been sent to the Mail List')
+            # return reverse('mailletter')
+            return render(request, 'dashboard/mail_letter.html')    
+    else:
+        form = MailMessageForm()
+    context = {
+        'form': form,
+    }
+    return render(request, 'dashboard/mail_letter.html', context)    
+
+# emailsignal = Signal(providing_args=['name'])
+
+
 def jobpost(request):
+    emails = Subscriber.objects.all()
+    df = read_frame(emails, fieldnames=['email'])
+    mail_list = df['email'].values.tolist()
     if request.method == "POST":
         fm = JobPostForm(request.POST)
         if fm.is_valid():
@@ -49,7 +108,20 @@ def jobpost(request):
 
             print(instance)
             instance.save()
-            return redirect('comapny-info')
+            send_mail(
+            # send_mass_mail(
+                instance,
+                '',
+                mail_list,
+                recipient_list=['shivendrad.bluethink@gmail.com'],
+                # fail_silently=False,
+            )    
+                # mail_list,
+                # fail_silently=False,
+            # )
+            print('----done----')
+            # return redirect('comapny-info')
+            return render(request, 'dashboard/dashboard.html')
 
     else:
         fm = JobPostForm()
@@ -76,27 +148,27 @@ def get_job(request, id):
 #       'job': job,
 #       'email': request.POST['email']
 #     }
-#     return render(request, 'subscribed.html', {'payload': payload})      
+# #     return render(request, 'subscribed.html', {'payload': payload})      
 
-from dashboard.signals import new_subscriber
+# from dashboard.signals import new_subscriber
 
-def subscribe(request, id):
-    job = JobPost.objects.get(pk=id)
-    subscriber = Subscriber(email=request.POST['email'])
-    subscriber.save()
+# def subscribe(request, id):
+#     job = JobPost.objects.get(pk=id)
+#     subscriber = Subscriber(email=request.POST['email'])
+#     subscriber.save()
 
-    subscription = Subscription(user=subscriber, job=job, email=subscriber.email)
-    subscription.save()
+#     subscription = Subscription(user=subscriber, job=job, email=subscriber.email)
+#     subscription.save()
 
-    # Add this line that sends our custom signal
-    new_subscriber.send(sender=subscription, job=job, subscriber=subscriber)
-    print('--------- email')
+#     # Add this line that sends our custom signal
+#     new_subscriber.send(sender=subscription, job=job, subscriber=subscriber)
+#     print('--------- email')
 
-    payload = {
-      'job': job,
-      'email': request.POST['email']
-    }
-    return render(request, 'subscribed.html', {'payload': payload})
+#     payload = {
+#       'job': job,
+#       'email': request.POST['email']
+#     }
+#     return render(request, 'subscribed.html', {'payload': payload})
 
 
 def jobdetailview(request):
@@ -288,10 +360,30 @@ def test(request):
     test_func.delay()
     return HttpResponse("Done")        
 
-
-def send_mail_to_all(request):
+# @receiver(emailsignal)
+def send_mail_to_all(request,**kwargs):
     send_mail_func.delay()
     return HttpResponse("Sent")
+
+
+# from celery.schedules import crontab
+# from django.http.response import HttpResponse
+# from django.shortcuts import render
+# from .tasks import test_func
+# from dashboard.tasks import send_mail_func
+# from django_celery_beat.models import PeriodicTask, CrontabSchedule
+# import json
+# from time import timezone
+
+# @receiver(emailsignal)
+# def schedule_mail(request,**kwargs):
+#     schedule, created = CrontabSchedule.objects.get_or_create(minute=1)#hour = 0, minute = 2)
+#     print('--------')
+#     task = PeriodicTask.objects.create(crontab=schedule, name="schedule_mail_task_"+"10", task='dashboard.tasks.send_mail_func')#, args = json.dumps([[2,3]]))
+#     print('+++++++')
+#     return HttpResponse("Done")
+#     print('@@@@@@@@')
+
 
 
 from celery.schedules import crontab
@@ -303,7 +395,14 @@ from django_celery_beat.models import PeriodicTask, CrontabSchedule
 import json
 
 
-def schedule_mail(request):
-    schedule, created = CrontabSchedule.objects.get_or_create(hour = 17, minute = 55)
-    task = PeriodicTask.objects.create(crontab=schedule, name="schedule_mail_task_"+"2", task='dashboard.tasks.send_mail_func')#, args = json.dumps([[2,3]]))
+# @receiver(emailsignal)
+def schedule_mail(request,**kwargs):
+    schedule, created = CrontabSchedule.objects.get_or_create(hour = 16, minute = 22)
+    task = PeriodicTask.objects.create(crontab=schedule, name="schedule_mail_task_"+"3", task='dashboard.tasks.send_mail_func')#, args = json.dumps([[2,3]]))
     return HttpResponse("Done")
+
+
+
+
+
+

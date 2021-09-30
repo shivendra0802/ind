@@ -42,12 +42,13 @@ class RegistrationView(View):
             'has_error': False
         }
 
-        email = request.POST.get('email')
-        role = request.POST.get('name')
-        password = request.POST.get('password')
-        password2 = request.POST.get("confirm-password")
+        email = request.POST.get('email','')
+        role = request.POST.get('name','')
+        checkbox = request.POST.getlist('checks[]','')
+        password = request.POST.get('password','')
+        password2 = request.POST.get("confirm-password",'')
 
-        print(email,role,password,password2)
+        print(email,role,password,password2, checkbox)
 	
         if len(password) < 6:
             messages.add_message(request, messages.ERROR,

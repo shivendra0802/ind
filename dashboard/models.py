@@ -1,11 +1,23 @@
+from django.core.mail import message
 from django.db import models
+
+from dashboard.email import send_review_email
 from .make_slug import unique_slug_generator,random_string_generator
 import string, random
-from django.db.models.signals import pre_save
+from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
 from django.utils.text import slugify
-
+# from dashboard.email import send_review_email
+# from dashboard.views import schedule_mail
 # Create your models here.
+# from dashboard.views import schedule_mail
+from celery.schedules import crontab
+from django.http.response import HttpResponse
+from django.shortcuts import render
+from .tasks import test_func
+from dashboard.tasks import send_mail_func
+from django_celery_beat.models import PeriodicTask, CrontabSchedule
+import json
 
 role = (
     ("Owner", "Owner"),
@@ -30,6 +42,8 @@ wfh = (
     ("No", "No"),
     ("Temporarily due to COVID-19", "Temporarily due to COVID-19"),
 )
+
+# from .views import mail_letter
 
 class JobPost(models.Model):
     id = models.BigAutoField(primary_key=True)    
@@ -63,6 +77,27 @@ def pre_save_receiver(sender, instance, *args, **kwargs):
         instance.slug = unique_slug_generator(instance)
 
 pre_save.connect(pre_save_receiver, sender=JobPost)
+
+
+# def post_save_receiver(sender, instance, *args, **kwargs):
+#     instance = mail_letter(instance)
+
+# post_save.connect(post_save_receiver, sender=JobPost)
+
+
+# @receiver(post_save, sender=JobPost)
+# def message_alert(sender, instance, **kwargs, schedule_mail):
+    # print('--------------')
+    # def schedule_mail(request):
+    #     print('++++++++++++')
+    #     schedule, created = CrontabSchedule.objects.get_or_create(hour = 0, minute = 5)
+    #     print('===========')
+    #     task = PeriodicTask.objects.create(crontab=schedule, name="schedule_mail_task_"+"1", task='dashboard.tasks.send_mail_func')#, args = json.dumps([[2,3]]))
+    #     print('**********')
+    #     return HttpResponse("Done")
+    # instance.schedule_mail  = schedule_mail
+    # instance.product.stock -= instance.amount
+    # instance.product.save()
 
 class CompanyInformation(models.Model):
     id = models.BigAutoField(primary_key=True)
@@ -149,13 +184,21 @@ class Resumeupload(models.Model):
 
 
 class Subscriber(models.Model):
-    email = models.CharField(max_length=255, blank=False, unique=True)
+    email = models.EmailField(max_length=255, blank=False, unique=True,null=True)
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.email
 
+
+class MailMessage(models.Model):
+    title = models.CharField(max_length=255, null=True)
+    message = models.TextField(null=True)
+    
+    def __str__(self):
+        return self.title
+    
 
 class Subscription(models.Model):
     email = models.CharField(max_length=255, blank=False, unique=True)
