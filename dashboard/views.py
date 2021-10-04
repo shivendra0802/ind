@@ -79,6 +79,7 @@ def mail_letter(request):
     return render(request, 'dashboard/mail_letter.html', context)    
 
 # emailsignal = Signal(providing_args=['name'])
+# import SendMail
 
 
 def jobpost(request):
@@ -109,17 +110,18 @@ def jobpost(request):
             print(instance)
             instance.save()
             send_mail(
-            # send_mass_mail(
-                instance,
+                job_title,
                 '',
                 mail_list,
-                recipient_list=['shivendrad.bluethink@gmail.com'],
-                # fail_silently=False,
+                # recipient_list=['shivendrad.bluethink@gmail.com'],
+                fail_silently=False,
             )    
+                        # send_mass_mail(
+
                 # mail_list,
                 # fail_silently=False,
             # )
-            print('----done----')
+            # print('----done----')
             # return redirect('comapny-info')
             return render(request, 'dashboard/dashboard.html')
 
@@ -397,7 +399,7 @@ import json
 
 # @receiver(emailsignal)
 def schedule_mail(request,**kwargs):
-    schedule, created = CrontabSchedule.objects.get_or_create(hour = 16, minute = 22)
+    schedule, created = CrontabSchedule.objects.get_or_create(hour = 12, minute = 20)
     task = PeriodicTask.objects.create(crontab=schedule, name="schedule_mail_task_"+"3", task='dashboard.tasks.send_mail_func')#, args = json.dumps([[2,3]]))
     return HttpResponse("Done")
 
@@ -406,3 +408,64 @@ def schedule_mail(request,**kwargs):
 
 
 
+#####sendgrid 
+from django.shortcuts import render
+from django.http import HttpResponse
+from django.conf import settings
+from django.views.decorators.csrf import csrf_exempt
+import random
+from .forms import SubscibersForm
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
+
+
+# Helper Functions
+def random_digits():
+    return "%0.12d" % random.randint(0, 999999999999)
+
+
+@csrf_exempt
+def new(request):
+    if request.method == 'POST':
+        sub = Subscriber(email=request.POST['email'], conf_num=random_digits())
+        sub.save()
+        print('------',sub)
+        message = Mail(
+            from_email=settings.FROM_EMAIL,
+            to_emails=sub.email,
+            subject='Newsletter Confirmation',
+            html_content='Thank you for signing up for my email newsletter! \
+                Please complete the process by \
+                <a href="{}/confirm/?email={}&conf_num={}"> clicking here to \
+                confirm your registration</a>.'.format(request.build_absolute_uri('/confirm/'),
+                                                    sub.email,
+                                                    sub.conf_num))
+        print('++++++',message)   
+        try:                                         
+            sg = SendGridAPIClient(settings.SENDGRID_API_KEY)
+            print('======',sg)
+        except Exception as e:
+            print(e.message)
+        response = sg.send(message)
+        return render(request, 'dashboard/sendgridnew.html', {'email': sub.email, 'action': 'added', 'form': SubscibersForm()})
+    else:
+        return render(request, 'dashboard/sendgridnew.html', {'form': SubscibersForm()})
+
+
+def confirm(request):
+    sub = Subscriber.objects.get(email=request.GET['email'])
+    if sub.conf_num == request.GET['conf_num']:
+        sub.confirmed = True
+        sub.save()
+        return render(request, 'sendgridnew.html', {'email': sub.email, 'action': 'confirmed'})
+    else:
+        return render(request, 'sendgridnew.html', {'email': sub.email, 'action': 'denied'})
+
+
+def delete(request):
+    sub = Subscriber.objects.get(email=request.GET['email'])
+    if sub.conf_num == request.GET['conf_num']:
+        sub.delete()
+        return render(request, 'sendgridnew.html', {'email': sub.email, 'action': 'unsubscribed'})
+    else:
+        return render(request, 'sendgridnew.html', {'email': sub.email, 'action': 'denied'})

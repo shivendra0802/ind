@@ -1,0 +1,10 @@
+{% extends "fake/fakebase.html" %}
+
+{% block content %}
+    <div>
+        <h3>{{ book.title }}</h3>
+        <p>Number of Pages: {{ book.number_of_pages }}</p>
+        <button hx-get="">Update</button>
+        <button hx-post="">Delete</button>
+    </div>
+{% endblock %}    

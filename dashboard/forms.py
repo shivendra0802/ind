@@ -6,6 +6,11 @@ from django.forms import ModelForm
 from django import forms
 
 
+
+
+
+
+
 class JobPostForm(ModelForm):
     class Meta:
         model = JobPost
@@ -37,6 +42,13 @@ class SubscibersForm(forms.ModelForm):
     class Meta:
         model = Subscriber
         fields = ['email', ]
+
+from django import forms
+
+# class SubscribersForm(forms.Form):
+#     email = forms.EmailField(label='Your email',
+#                              max_length=100,
+#                              widget=forms.EmailInput(attrs={'class': 'form-control'}))
 
 
 class MailMessageForm(forms.ModelForm):

@@ -2,7 +2,7 @@
 # from accounts.views import RegistrationView, LoginView,LogoutView
 from accounts import views
 from django.urls.conf import path
-from .views import jobpost, jobdetailview,company_info,qualifi, showdata, subscr, uploadpdf, show_pdf, extract,basepage,test,send_mail_to_all,schedule_mail, mail_letter#, get_jobs, subscribe, get_job
+from .views import jobpost, jobdetailview,company_info,qualifi, showdata, subscr, uploadpdf, show_pdf, extract,basepage,test,send_mail_to_all,schedule_mail, mail_letter,new, confirm, delete #, get_jobs, subscribe, get_job
 from dashboard import views
 from .views import ReviewEmailView
 from django.conf.urls.static import static
@@ -30,6 +30,9 @@ urlpatterns = [
     # path('jobs/<int:id>', get_job, name="job_view"),
     path('subscribe', views.subscr, name="subscribe"),
     path('mailletter', views.mail_letter, name="mailletter"),
+    path('new/', views.new, name='new'),
+    path('confirm/', views.confirm, name='confirm'),
+    path('delete/', views.delete, name='delete'),
 
 ]
 if settings.DEBUG:

@@ -48,8 +48,11 @@ INSTALLED_APPS = [
     'dashboard',
     'fake',
     'django_celery_results',
-    'django_celery_beat'
+    'django_celery_beat',
+    'crispy_tailwind',
 ]
+
+CRISPY_TEMPLATE_PACK = 'bootstrap5'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap5'
 
@@ -62,6 +65,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'fake.middilewares.MyMiddileware',
+    'fake.middilewares.MyExceptionMiddileware'
+    # 'fake.middilewares.MyTemplateResponseMiddileware'
 ]
 
 ROOT_URLCONF = 'core.urls'
@@ -105,7 +111,6 @@ DATABASES = {
         "PORT": '5432',
     }
 }
-
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
 
@@ -180,13 +185,14 @@ LOGOUT_REDIRECT_URL = 'index'
 # #CELERY BEAT
 # CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 
+import os
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_HOST_USER = "shivendrad.bluethink@gmail.com"
-EMAIL_HOST_PASSWORD = "Shivendra@0802"
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = "celery <shivendrad.bluethink@gmail.com>"
 
 
@@ -201,3 +207,11 @@ CELERY_RESULT_BACKEND = 'django-db'
 
 #CELERY BEAT
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+
+
+###sendgrid 
+FROM_EMAIL = 'shivendrad.bluethink@gmail.com'
+
+SENDGRID_API_KEY = os.environ.get('SENDGRID_API_KEY')
+
+
