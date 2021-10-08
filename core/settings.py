@@ -35,7 +35,7 @@ AUTH_USER_MODEL = 'accounts.CustomUser'
 # Application definition
 
 INSTALLED_APPS = [
-    'jazzmin',
+    # 'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -65,8 +65,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'fake.middilewares.MyMiddileware',
-    'fake.middilewares.MyExceptionMiddileware'
+    # 'fake.middilewares.MyMiddileware',
+    # 'fake.middilewares.MyExceptionMiddileware'
     # 'fake.middilewares.MyTemplateResponseMiddileware'
 ]
 
@@ -104,11 +104,11 @@ WSGI_APPLICATION = 'core.wsgi.application'
 DATABASES = {
     "default": {
         "ENGINE": 'django.db.backends.postgresql_psycopg2',
-        "NAME": 'newdb',
-        "USER": 'jobuser',
-        "PASSWORD": 'jobpass',
+        "NAME": 'mydb',
+        "USER": 'myuser',
+        "PASSWORD": 'mypass',
         "HOST": 'localhost',
-        "PORT": '5432',
+        "PORT": '5434',
     }
 }
 # Password validation
@@ -171,19 +171,6 @@ LOGOUT_REDIRECT_URL = 'index'
 # import djcelery
 # djcelery.setup_loader()
 
-
-
-
-# CELERY_BROKER_URL = 'redis://127.0.0.1:6379'
-# CELERY_ACCEPT_CONTENT = ['application/json']
-# CELERY_RESULT_SERIALIZER = 'json'
-# CELERY_TASK_SERIALIZER = 'json'
-# CELERY_TIMEZONE = 'Asia/Kolkata'
-
-# CELERY_RESULT_BACKEND = 'django-db'
-
-# #CELERY BEAT
-# CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 
 import os
 
